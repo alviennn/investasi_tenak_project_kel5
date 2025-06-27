@@ -46,10 +46,10 @@
 
             <!-- Dropdown on Hover (tanpa klik) -->
             <div class="relative group">
-                <div class="cursor-pointer bg-transparent text-white hover:bg-purple-600 hover:text-white font-semibold py-2 px-4 rounded-lg transition flex items-center">
-                    <i class="fas fa-bars text-2xl"></i>
+                <div class="cursor-pointer bg-transparent text-white hover:bg-purple-600 hover:text-white font-semibold py-2 px-4 rounded-lg transition flex items-center space-x-2">
+                    <span>Menu</span>
+                    <i class="fas fa-chevron-down text-sm"></i>
                 </div>
-
 
                 <!-- Dropdown content -->
                 <div class="absolute right-0 mt-2 w-56 bg-white text-gray-700 rounded-lg shadow-lg z-50 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">

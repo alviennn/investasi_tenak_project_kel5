@@ -9,26 +9,6 @@
 
 <body class="bg-gray-50 text-gray-800">
 
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-purple-600 to-indigo-800 text-white shadow-lg">
-        <div class="container mx-auto px-4 py-6">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-piggy-bank text-2xl"></i>
-                    <h1 class="text-2xl font-bold">InvesTernak</h1>
-                </div>
-                <!-- Tombol Kembali di Header -->
-                <div class="flex items-center space-x-4">
-                    <a href="{{ url()->previous() }}" class="text-indigo-600 hover:bg-indigo-100 hover:text-indigo-800 flex items-center space-x-2 px-4 py-2 rounded-lg transition duration-300 shadow-lg hover:shadow-xl">
-                        <span class="font-semibold">Kembali</span>
-                        <i class="fas fa-arrow-left text-xl"></i>
-                    </a>
-                </div>
-
-            </div>
-        </div>
-    </header>
-
     <div class="max-w-4xl mx-auto mt-10 bg-white shadow-lg rounded-lg p-8">
         <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">
             Investasi ke Ternak: {{ $ternak->nama ?? 'Ternak #' . $ternak->id }}
@@ -84,7 +64,9 @@
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-2 focus:ring-indigo-500">
                     <option value="">-- Pilih Bank --</option>
                     @foreach($bank as $b)
-                    <option value="{{ $b->id }}" {{ old('id_bank') == $b->id ? 'selected' : '' }}>{{ $b->nama_bank }}</option>
+                    <option value="{{ $b->id }}" {{ old('id_bank') == $b->id ? 'selected' : '' }}>
+                        {{ $b->nama_bank }}
+                    </option>
                     @endforeach
                 </select>
             </div>
@@ -103,6 +85,7 @@
                     class="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     Investasikan Sekarang
                 </button>
+                <a href="{{ url()->previous() }}" class="text-indigo-600 hover:underline">← Kembali</a>
             </div>
         </form>
     </div>

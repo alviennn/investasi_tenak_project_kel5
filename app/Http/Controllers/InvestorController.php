@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Penarikan;
 use App\Models\Ternak;
 use App\Models\LaporanPertumbuhan;
 use Illuminate\Support\Facades\Auth;
@@ -34,9 +35,10 @@ class InvestorController extends Controller
         $totalternak = Ternak::count();
         $jumlahPetani = User::where('role', 'petani')->count();
         $investasi = $investor->investasi()->with(['ternak', 'bank'])->latest()->paginate(10);
+        $penarikan = Penarikan::count();
 
 
         // Kirim data ke view
-        return view('investor.index', compact('ternaks', 'saldo', 'total', 'totalternak', 'jumlahPetani', 'laporan', 'investasi'));
+        return view('investor.index', compact('ternaks', 'saldo', 'total', 'totalternak', 'jumlahPetani', 'laporan', 'investasi', 'penarikan'));
     }
 }

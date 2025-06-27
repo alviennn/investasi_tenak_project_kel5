@@ -41,24 +41,24 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Menambahkan pengguna investor menggunakan factory
-        User::factory()->create([
-            'name' => 'Investor User',
-            'email' => 'investor@example.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password123'),
-            'remember_token' => Str::random(10),
-            'role' => 'investor',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Investor User',
+        //     'email' => 'investor@example.com',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('password123'),
+        //     'remember_token' => Str::random(10),
+        //     'role' => 'investor',
+        // ]);
 
-        // Menambahkan pengguna petani menggunakan factory
-        User::factory()->create([
-            'name' => 'Petani User',
-            'email' => 'petani@example.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password123'),
-            'remember_token' => Str::random(10),
-            'role' => 'petani',
-        ]);
+        // // Menambahkan pengguna petani menggunakan factory
+        // User::factory()->create([
+        //     'name' => 'Petani User',
+        //     'email' => 'petani@example.com',
+        //     'email_verified_at' => now(),
+        //     'password' => Hash::make('password123'),
+        //     'remember_token' => Str::random(10),
+        //     'role' => 'petani',
+        // ]);
 
         
     }

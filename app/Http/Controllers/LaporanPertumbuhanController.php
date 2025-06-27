@@ -31,10 +31,10 @@ class LaporanPertumbuhanController extends Controller
             ->latest()
             ->paginate(10); // Menampilkan 10 laporan per halaman
 
-        // Jika tidak ada laporan, pastikan kita mengirimkan koleksi kosong
-        if ($laporan->isEmpty()) {
-            $laporan = collect(); // Mengirim koleksi kosong agar tidak ada error di view
-        }
+        // // Jika tidak ada laporan, pastikan kita mengirimkan koleksi kosong
+        // if ($laporan->isEmpty()) {
+        //     $laporan = collect(); // Mengirim koleksi kosong agar tidak ada error di view
+        // }
 
         return view('petani.laporan', compact('laporan'));
     }
@@ -71,8 +71,8 @@ class LaporanPertumbuhanController extends Controller
         $laporan = LaporanPertumbuhan::with('ternak')->findOrFail($id);
 
         if (Auth::user()->role === 'investor') {
-        return view('petani.laporandetail', compact('laporan'));
-    }
+            return view('petani.laporandetail', compact('laporan'));
+        }
         return view('petani.laporandetail', compact('laporan'));
     }
 
@@ -90,6 +90,7 @@ class LaporanPertumbuhanController extends Controller
 
         // Ambil ternak yang terkait dengan petani yang sedang login
         $ternaks = Ternak::where('id_petani', $user->id)->get(); // Memastikan petani_id yang benar
+
 
         // Kirimkan data ternaks ke view
         return view('petani.tambah_laporan', compact('ternaks'));

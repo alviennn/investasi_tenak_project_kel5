@@ -59,7 +59,6 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse ($laporan as $item)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900">#{{ $item->id }}</td>
                             <td class="px-6 py-4 text-sm text-gray-700">{{ optional($item->petani)->id ?? '-' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-700">{{ optional($item->ternak)->nama ?? '-' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-700">{{ $item->nama }}</td>

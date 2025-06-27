@@ -32,6 +32,8 @@ class Investor extends Model
         return $this->belongsTo(Penarikan::class);
     }
 
+    
+
     /**
      * Relasi antara Investor dan Komoditas melalui Investasi.
      */

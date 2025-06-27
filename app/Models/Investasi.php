@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Investor;
 use App\Models\User;
 use App\Models\Ternak;
+// use App\Models\Bank;
 
 class Investasi extends Model
 {
@@ -30,7 +31,7 @@ class Investasi extends Model
 
     public function ternak()
     {
-        return $this->belongsTo(Ternak::class,'id_ternak');
+        return $this->belongsTo(Ternak::class, 'id_ternak');
     }
 
     public function bank()

@@ -1,48 +1,22 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Form Investasi Ternak</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-gray-50 text-gray-800">
-
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-purple-600 to-indigo-800 text-white shadow-lg">
-        <div class="container mx-auto px-4 py-6">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-piggy-bank text-2xl"></i>
-                    <h1 class="text-2xl font-bold">InvesTernak</h1>
-                </div>
-                <!-- Tombol Kembali di Header -->
-<button type="submit" class="text-red-600 hover:bg-red-100 hover:text-red-800 flex items-center space-x-2 px-4 py-2 rounded-lg transition duration-300 shadow-lg hover:shadow-xl">
-    <span class="font-semibold">Keluar</span>
-    <i class="fas fa-sign-out-alt text-xl"></i>
-</button>
-
-            </div>
-        </div>
-    </header>
-
-    <div class="max-w-4xl mx-auto mt-10 bg-white shadow-lg rounded-lg p-8">
-        <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             Investasi ke Ternak: {{ $ternak->nama ?? 'Ternak #' . $ternak->id }}
-        </h1>
+        </h2>
+    </x-slot>
 
+    <div class="py-6 px-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg">
         {{-- Flash message --}}
         @if(session('success'))
-        <div class="bg-green-100 text-green-800 p-4 rounded mb-6">
+        <div class="alert alert-success bg-green-100 text-green-800 p-4 rounded mb-4">
             {{ session('success') }}
         </div>
         @endif
 
         {{-- Validation error --}}
         @if($errors->any())
-        <div class="bg-red-100 text-red-800 p-4 rounded mb-6">
-            <ul class="mb-0 list-disc list-inside">
+        <div class="alert alert-danger bg-red-100 text-red-800 p-4 rounded mb-4">
+            <ul class="mb-0">
                 @foreach($errors->all() as $error)
                 <li>{{ $error }}</li>
                 @endforeach
@@ -50,61 +24,58 @@
         </div>
         @endif
 
-        {{-- Form --}}
+        {{-- Form Investasi --}}
         <form action="{{ route('investasi.store', $ternak->id) }}" method="POST" class="space-y-6">
             @csrf
 
-            <!-- ID Investor -->
+            {{-- Info ID Investor --}}
             <div>
-                <label class="block text-sm font-medium text-gray-700">ID Investor:</label>
+                <label class="block font-medium text-sm text-gray-700">ID Investor:</label>
                 <input type="text" value="{{ Auth::id() }}" readonly
-                    class="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 shadow-sm p-2 focus:ring-2 focus:ring-indigo-500">
+                    class="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 shadow-sm p-2">
             </div>
 
-            <!-- ID Ternak -->
+            {{-- Info ID Ternak --}}
             <div>
-                <label class="block text-sm font-medium text-gray-700">ID Ternak:</label>
+                <label class="block font-medium text-sm text-gray-700">ID Ternak:</label>
                 <input type="text" value="{{ $ternak->id }}" readonly
-                    class="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 shadow-sm p-2 focus:ring-2 focus:ring-indigo-500">
+                    class="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 shadow-sm p-2">
             </div>
 
-            <!-- Tanggal Investasi -->
+            {{-- Info Tanggal Investasi --}}
             <div>
-                <label class="block text-sm font-medium text-gray-700">Tanggal Investasi:</label>
+                <label class="block font-medium text-sm text-gray-700">Tanggal Investasi:</label>
                 <input type="text" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" readonly
-                    class="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 shadow-sm p-2 focus:ring-2 focus:ring-indigo-500">
+                    class="mt-1 block w-full rounded-md bg-gray-100 border border-gray-300 shadow-sm p-2">
             </div>
 
-            <!-- Pilih Bank -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Pilih Bank:</label>
-                <select name="id_bank" required
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-2 focus:ring-indigo-500">
-                    <option value="">-- Pilih Bank --</option>
-                    @foreach($bank as $b)
-                    <option value="{{ $b->id }}" {{ old('id_bank') == $b->id ? 'selected' : '' }}>{{ $b->nama_bank }}</option>
-                    @endforeach
-                </select>
-            </div>
+            {{-- Input Bank --}}
+            <select name="id_bank" id="id_bank" required>
+                <option value="">-- Pilih Bank --</option>
+                @foreach($bank as $b)
+                    <option value="{{ $b->id }}" {{ old('id_bank') == $b->id ? 'selected' : '' }}>
+                        {{ $b->nama_bank }}
+                    </option>
+                @endforeach
+            </select>
 
-            <!-- Jumlah Dana -->
+            {{-- Input Dana Investasi --}}
             <div>
-                <label for="dana_investasi" class="block text-sm font-medium text-gray-700">Jumlah Dana Investasi (min Rp50.000):</label>
+                <label for="dana_investasi" class="block font-medium text-sm text-gray-700">
+                    Jumlah Dana Investasi (min Rp50.000):
+                </label>
                 <input type="number" name="dana_investasi" id="dana_investasi" min="50000"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 focus:ring-2 focus:ring-indigo-500"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
                     required value="{{ old('dana_investasi') }}">
             </div>
 
-            <!-- Tombol -->
-            <div class="flex justify-between items-center pt-6">
-                <button type="submit"
-                    class="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            {{-- Submit --}}
+            <div class="pt-4 flex gap-4 justify-between">
+                <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                     Investasikan Sekarang
                 </button>
+                <a href="{{ url()->previous() }}" class="text-blue-500 hover:underline mt-2 self-center">← Kembali</a>
             </div>
         </form>
     </div>
-
-</body>
-
-</html>
+</x-app-layout>

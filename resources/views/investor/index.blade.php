@@ -142,12 +142,12 @@
                 </a>
 
                 <!-- Investasi Aktif -->
-                <a href="" class="block bg-white rounded-lg shadow hover:shadow-lg transition duration-200 border-l-4 border-green-500">
+                <a href="{{ route('penarikan') }}" class="block bg-white rounded-lg shadow hover:shadow-lg transition duration-200 border-l-4 border-green-500">
                     <div class="p-5">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h3 class="text-gray-500 font-medium">Investasi Aktif</h3>
-                                <p class="text-2xl font-bold">6</p>
+                                <h3 class="text-gray-500 font-medium">penarikan</h3>
+                                <p class="text-2xl font-bold">{{ $penarikan }}</p>
                             </div>
                             <div class="bg-green-100 text-green-600 p-3 rounded-full">
                                 <i class="fas fa-chart-line"></i>

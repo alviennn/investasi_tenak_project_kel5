@@ -59,12 +59,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan-ternak', [LaporanPertumbuhanController::class, 'index'])->name('petani-laporan');
     Route::get('/laporan-tambah', [LaporanPertumbuhanController::class, 'create'])->name('petani.tambah_laporan');
     Route::get('/laporan/{id}', [LaporanPertumbuhanController::class, 'show'])->name('petani.laporan');
-    Route::get('/investor/laporan', [LaporanPertumbuhanController::class, 'indexInvestor'])->name('investor.laporan');
+    Route::get('/investor-laporan', [LaporanPertumbuhanController::class, 'indexInvestor'])->name('investor.laporan');
     // Route::post('/laporan-tambah', [LaporanPertumbuhanController::class, 'store'])->name('laporan.store');
     Route::post('/laporan-tambah', [LaporanPertumbuhanController::class, 'store'])->middleware('auth');
     Route::get('/petani/show/{id}', [TernakController::class, 'show'])->name('petani.detail');
     Route::get('/laporan/show/{id}', [LaporanPertumbuhanController::class, 'showdetaillaporan'])->name('petani.laporandetail');
-    
+
 
 
     Route::get('/petani/create', [TernakController::class, 'create'])->name('petani.tambah');
@@ -76,7 +76,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     //     //     // Route::get('/laporan-perkembangan', [LaporannPerkembanganTernakController::class, 'index']);
-    Route::get('penarikan', [PenarikanController::class, 'penarikan']);
+    Route::get('penarikan', [PenarikanController::class, 'penarikan'])->name('penarikan');
     Route::post('penarikan', [PenarikanController::class, 'penarikanDana']);
     //     //     // Route::get('/laporan-ternak', [LaporannPerkembanganTernakController::class, 'liatlaporan'])->name('petani-laporan');
     //     //     // Route::get('/ternak', [TernakController::class, 'show'])->name('petani.show');
