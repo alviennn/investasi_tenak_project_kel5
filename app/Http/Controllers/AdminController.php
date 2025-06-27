@@ -22,7 +22,7 @@ class AdminController extends Controller
         $totalTernak = Ternak::count();
         $totalBank = Bank::count();
 
-        $investasiTerbaru = Investasi::with(['investor.user', 'ternaks'])
+        $investasiTerbaru = Investasi::with(['investor.user', 'ternak'])
             ->latest()
             ->take(5)
             ->get();
