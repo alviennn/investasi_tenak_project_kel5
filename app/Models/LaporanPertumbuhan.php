@@ -22,17 +22,17 @@ class LaporanPertumbuhan extends Model
 
     public function petani()
     {
-        return $this->belongsTo(Petani::class, 'id_petani');
+        return $this->belongsTo(Petani::class,  'id_petani');
     }
 
     public function ternak()
     {
         return $this->belongsTo(Ternak::class, 'id_ternaks');
     }
-    
+
     // Relasi ke model User
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
 }

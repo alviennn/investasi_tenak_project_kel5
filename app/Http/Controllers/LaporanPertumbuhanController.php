@@ -17,10 +17,42 @@ class LaporanPertumbuhanController extends Controller
      */
     public function index()
     {
-        $laporan = LaporanPertumbuhan::with(['petani', 'ternak'])->latest()->paginate(10);
+        // Cek apakah pengguna yang sedang login adalah petani
+        if (Auth::user()->role !== 'petani') {
+            return redirect('/');
+        }
+
+        // Ambil petani yang sedang login
+        $petani = Auth::user()->petani;
+
+        // Ambil laporan pertumbuhan dengan relasi petani dan ternak terkait
+        $laporan = LaporanPertumbuhan::with(['petani', 'ternak'])
+            ->where('id_petani', $petani->id) // Menambahkan filter berdasarkan id_petani
+            ->latest()
+            ->paginate(10); // Menampilkan 10 laporan per halaman
+
+        // Jika tidak ada laporan, pastikan kita mengirimkan koleksi kosong
+        if ($laporan->isEmpty()) {
+            $laporan = collect(); // Mengirim koleksi kosong agar tidak ada error di view
+        }
 
         return view('petani.laporan', compact('laporan'));
     }
+
+    public function indexInvestor()
+    {
+        if (Auth::user()->role !== 'investor') {
+            return redirect('/');
+        }
+
+        // Ambil semua laporan pertumbuhan dengan relasi ternak & petani
+        $laporan = LaporanPertumbuhan::with(['ternak', 'petani.user'])
+            ->latest()
+            ->paginate(10);
+
+        return view('investor.laporan', compact('laporan'));
+    }
+
 
     /**
      * Menampilkan detail satu laporan pertumbuhan ternak.
@@ -34,15 +66,35 @@ class LaporanPertumbuhanController extends Controller
         return view('petani.laporan', compact('laporan'));
     }
 
+    public function showdetaillaporan($id)
+    {
+        $laporan = LaporanPertumbuhan::with('ternak')->findOrFail($id);
+
+        if (Auth::user()->role === 'investor') {
+        return view('petani.laporandetail', compact('laporan'));
+    }
+        return view('petani.laporandetail', compact('laporan'));
+    }
+
+
+    /**
+     * Form untuk membuat laporan baru.
+     */
     /**
      * Form untuk membuat laporan baru.
      */
     public function create()
     {
-        $ternaks = Ternak::all();
+        // Ambil user yang sedang login
+        $user = Auth::user();
 
+        // Ambil ternak yang terkait dengan petani yang sedang login
+        $ternaks = Ternak::where('id_petani', $user->id)->get(); // Memastikan petani_id yang benar
+
+        // Kirimkan data ternaks ke view
         return view('petani.tambah_laporan', compact('ternaks'));
     }
+
 
     /**
      * Simpan laporan baru.
@@ -55,7 +107,17 @@ class LaporanPertumbuhanController extends Controller
             return redirect()->route('petani-laporan')->with('error', 'Hanya petani yang bisa membuat laporan.');
         }
 
-        // Validasi input 
+        // Periksa apakah user memiliki petani
+        $petani = Auth::user()->petani;
+
+        if (!$petani) {
+            return redirect()->route('petani-laporan')->with('error', 'User ini tidak terdaftar sebagai petani.');
+        }
+
+        // Mengambil id_petani dari petani yang sedang login
+        $id_petani = $petani->id;
+
+        // Validasi input
         $request->validate([
             'id_ternaks' => 'required|exists:ternaks,id',
             'nama' => 'required|string|max:100',
@@ -64,14 +126,13 @@ class LaporanPertumbuhanController extends Controller
             'berat_rerata' => 'required|string|max:50',
             'pertumbuhan_persen' => 'required|numeric',
             'status' => 'required|in:Excellent,Good,Average,Poor',
-            // 'id_petani' => 'required|exists:petani,id',
         ]);
 
-        // Menambahkan user_id (id_petani) ke request data
+        // Menambahkan id_petani ke request data
         $data = $request->all();
-        $data['id_petani'] = Auth::id();  // Menambahkan ID pengguna yang sedang login ke kolom id_petani
+        $data['id_petani'] = $id_petani;
 
-        // Menyimpan laporan dengan id_petani yang ditambahkan
+        // Menyimpan laporan pertumbuhan
         LaporanPertumbuhan::create($data);
 
         // Redirect ke halaman tambah laporan dengan pesan sukses
@@ -95,5 +156,51 @@ class LaporanPertumbuhanController extends Controller
     {
         $ternak = Ternak::findOrFail($id);
         return view('investasi.form', compact('ternak'));
+    }
+
+    //update
+    public function edit($id)
+    {
+        // Ambil laporan yang ingin diedit
+        $laporan = LaporanPertumbuhan::findOrFail($id);
+
+        // Cek apakah user yang login adalah petani yang memiliki laporan ini
+        if (Auth::user()->role !== 'petani' || Auth::user()->petani->id !== $laporan->id_petani) {
+            return redirect()->route('petani-laporan')->with('error', 'Akses ditolak.');
+        }
+
+        // Ambil daftar ternak milik petani ini
+        $ternaks = Ternak::where('id_petani', Auth::user()->id)->get();
+
+        return view('petani.edit_laporan', compact('laporan', 'ternaks'));
+    }
+
+    /**
+     * Memproses update laporan pertumbuhan.
+     */
+    public function update(Request $request, $id)
+    {
+        $laporan = LaporanPertumbuhan::findOrFail($id);
+
+        // Cek apakah user adalah petani pemilik laporan
+        if (Auth::user()->role !== 'petani' || Auth::user()->petani->id !== $laporan->id_petani) {
+            return redirect()->route('petani-laporan')->with('error', 'Akses ditolak.');
+        }
+
+        // Validasi input
+        $request->validate([
+            'id_ternaks' => 'required|exists:ternaks,id',
+            'nama' => 'required|string|max:100',
+            'jenis' => 'required|in:ayam,sapi,kambing,bebek,ikan',
+            'tanggal_laporan' => 'required|date',
+            'berat_rerata' => 'required|string|max:50',
+            'pertumbuhan_persen' => 'required|numeric',
+            'status' => 'required|in:Excellent,Good,Average,Poor',
+        ]);
+
+        // Update data
+        $laporan->update($request->all());
+
+        return redirect()->route('petani-laporan')->with('success', 'Laporan berhasil diperbarui.');
     }
 }

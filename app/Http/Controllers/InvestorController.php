@@ -2,37 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Ternak;
 use App\Models\LaporanPertumbuhan;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class InvestorController extends Controller
 {
     public function index()
     {
-
-        // $query = Investor::query();
-
-        // $saldo = $query->clone()->where('saldo', 'sal')->count();
-        $user = Auth::user();
-        $saldo = $user->investor ? $user->investor->saldo : 0;  // Memastikan investor ada dan mengambil saldo
-
-
-        if (Auth::user()->role != 'investor') {
+        // Cek role pengguna
+        if (Auth::user()->role !== 'investor') {
             return redirect('/');
         }
 
-        $query = Ternak::query();
-        $laporan = LaporanPertumbuhan::query();
+        $investor = Auth::user()->investor;
 
-        // Ambil data ternak dengan pagination (10 data per halaman)
-        $ternaks = $query->latest()->paginate(10);
+        $investasi = $investor->investasi()->with(['ternak', 'bank'])->latest()->paginate(10);
+
+        $user = Auth::user();
+        $saldo = $user->investor ? $user->investor->saldo : 0;
+
+        // Ambil ternak dengan relasi petani yang terkait dan eager load petani dan user
+        $ternaks = Ternak::with('petani.user')  // Correctly eager load 'petani' and its 'user'
+            ->latest()->paginate(10);  // Menggunakan eager loading untuk relasi petani dan user
+
+        // Hitung total laporan
+        $laporan = LaporanPertumbuhan::with('petani')->latest()->get();  // Memuat relasi petani untuk laporan
         $total = $laporan->count();
-        $totalternak = $query->count();
+        $totalternak = Ternak::count();
+        $jumlahPetani = User::where('role', 'petani')->count();
+        $investasi = $investor->investasi()->with(['ternak', 'bank'])->latest()->paginate(10);
 
-        // Kirimkan data ternaks ke view
-        return view('investor.index', compact('ternaks', 'saldo', 'total', 'totalternak'));
+
+        // Kirim data ke view
+        return view('investor.index', compact('ternaks', 'saldo', 'total', 'totalternak', 'jumlahPetani', 'laporan', 'investasi'));
     }
 }

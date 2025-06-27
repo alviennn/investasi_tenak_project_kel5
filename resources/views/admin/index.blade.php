@@ -47,12 +47,15 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="relative group">
-                        <button id="profileButton" class="flex items-center space-x-2 hover:bg-purple-700 px-3 py-2 rounded-lg transition">
+                        <!-- Tombol Profil -->
+                        <div class="flex items-center space-x-2 px-3 py-2 cursor-pointer hover:bg-purple-700 rounded-lg transition">
                             <span class="font-medium">{{ Auth::user()->name }}</span>
                             <i class="fas fa-user-circle text-xl"></i>
-                        </button>
-                        <div id="profileMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-50">
-                            <a href="{{ route('profile.edit')}}" class="block px-4 py-2 text-gray-800 hover:bg-purple-100">Profil</a>
+                        </div>
+
+                        <!-- Dropdown muncul saat hover di group -->
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-150 z-50">
+                            <a href="{{ route('admin.profile.edit')}}" class="block px-4 py-2 text-gray-800 hover:bg-purple-100">Profil</a>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-100">
@@ -62,7 +65,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  
         </div>
     </header>
 
@@ -100,8 +103,8 @@
                 </div>
                 <div class="bg-white shadow rounded-lg p-6 flex justify-between items-center border-l-4 border-yellow-500">
                     <div>
-                        <h2 class="text-gray-500 font-medium">Saldo Bank</h2>
-                        <p class="text-2xl font-bold">Rp {{ number_format($totalSaldoBank, 0, ',', '.') }}</p>
+                        <h2 class="text-gray-500 font-medium">Bank Collaborator</h2>
+                        <p class="text-2xl font-bold">{{ $totalBank }}</p>
                     </div>
                     <div class="bg-yellow-100 text-yellow-600 p-3 rounded-full">
                         <i class="fas fa-coins"></i>
@@ -124,43 +127,45 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse($investasiTerbaru as $investasi)
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $investasi->investor->user->name ?? 'Tidak Ada Nama' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $investasi->ternaks->nama ?? '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Rp {{ number_format($investasi->dana_investasi, 0, ',', '.') }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $investasi->tanggal_investasi }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <span class="px-3 py-1 rounded-full text-xs font-semibold 
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $investasi->investor->user->name ?? 'Tidak Ada Nama' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $investasi->ternaks->nama ?? '-' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Rp {{ number_format($investasi->dana_investasi, 0, ',', '.') }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $investasi->tanggal_investasi }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold 
                                         {{ $investasi->status == 'Aktif' ? 'status-active' : 'status-inactive' }}">
-                                        {{ $investasi->status }}
-                                    </span>
-                                </td>
-                            </tr>
+                                    {{ $investasi->status }}
+                                </span>
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada data investasi.</td>
-                            </tr>
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada data investasi.</td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
+    @if(session('success'))
+    <div id="toast-success" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 flex items-center w-fit max-w-xs p-4 text-sm text-white bg-green-600 rounded-lg shadow transition-opacity duration-300" role="alert">
+        <svg class="w-5 h-5 mr-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" clip-rule="evenodd"></path>
+        </svg>
+        <span>{{ session('success') }}</span>
+    </div>
 
     <script>
-        document.getElementById("profileButton").addEventListener("click", function(event) {
-            event.stopPropagation();
-            const menu = document.getElementById("profileMenu");
-            menu.classList.toggle("hidden");
-        });
-
-        window.addEventListener("click", function(event) {
-            const menu = document.getElementById("profileMenu");
-            if (!menu.contains(event.target) && !event.target.closest("#profileButton")) {
-                menu.classList.add("hidden");
-            }
-        });
+        setTimeout(() => {
+            const toast = document.getElementById('toast-success');
+            if (toast) toast.style.opacity = '0';
+            setTimeout(() => toast?.remove(), 300);
+        }, 3000);
     </script>
+    @endif
+
 </body>
 
 </html>

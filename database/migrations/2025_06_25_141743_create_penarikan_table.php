@@ -10,9 +10,9 @@ class CreatePenarikanTable extends Migration
     {
         Schema::create('penarikan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_investor')->constrained('investor')->onDelete('cascade');
-            $table->foreignId('id_petani')->constrained('petani')->onDelete('cascade');
-            // $table->foreignId('id_bank')->constrained('bank')->onDelete('cascade');
+            $table->foreignId('id_investor')->nullable()->constrained('investor')->onDelete('cascade');
+            $table->foreignId('id_petani')->nullable()->constrained('petani')->onDelete('cascade');
+            $table->foreignId('id_bank')->nullable()->constrained('bank')->onDelete('cascade');
             // $table->string('nama_bank');
             // $table->string('nomor_rekening');
             $table->decimal('jumlah_penarikan', 15, 2);

@@ -27,12 +27,6 @@
                     <p class="text-gray-600">Pantau dan analisis laporan pertumbuhan ternak Anda</p>
                 </div>
             </div>
-
-            <a href="{{ route('petani.tambah_laporan') }}"
-                class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm md:text-base">
-                <i class="fas fa-plus"></i> Tambah Laporan
-            </a>
-
         </div>
 
         <!-- Tabel Data Laporan -->

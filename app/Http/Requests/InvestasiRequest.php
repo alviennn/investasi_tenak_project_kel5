@@ -15,7 +15,7 @@ class InvestasiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_bank' => 'required|in:BNI,BRI,BCA',
+            'id_bank' => 'required|exists:bank,id',
             'dana_investasi' => 'required|numeric|min:50000',
         ];
     }

@@ -21,10 +21,13 @@ class Ternak extends Model
     ];
 
     // Relasi ke petani (users table dengan role 'petani')
+    // app/Models/Ternak.php
+
     public function petani()
     {
-        return $this->belongsTo(User::class, 'id_petani');
+        return $this->belongsTo(Petani::class);
     }
+
 
     public function investasi()
     {

@@ -35,49 +35,60 @@
 </head>
 
 <body class="bg-gray-50">
-    <div class="container mx-auto px-4 py-8">
+    <div>
 
         <!-- Header Section -->
-        <div class="flex justify-between items-center mb-8">
+        <div class="bg-gradient-to-r from-purple-600 to-indigo-700 text-white shadow-md px-8 py-6 flex justify-between items-center w-full">
             <div>
-                <h1 class="text-3xl font-bold text-gray-800">Manajemen Ternak</h1>
-                <p class="text-gray-600">Kelola semua hewan ternak Anda di satu tempat</p>
+                <h1 class="text-3xl font-bold">Manajemen Ternak</h1>
+                <p class="text-white text-opacity-80">Kelola semua hewan ternak Anda di satu tempat</p>
             </div>
-            <div class="flex items-center gap-4">
-                <!-- Perkebambangan Ternak Button -->
-                <a href="{{ route('petani-laporan')}}" class="btn-primary px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200">Perkembangan Ternak
-                </a>
-                <!-- Tambah Ternak Baru Button -->
-                <a href="{{ route('petani.tambah') }}" class="btn-primary px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200">
-                    <i class="fas fa-plus"></i> Tambah Ternak Baru
-                </a>
-                <!-- Logout Button -->
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn-primary px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-200">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </form>
+
+            <!-- Dropdown on Hover (tanpa klik) -->
+            <div class="relative group">
+                <div class="cursor-pointer bg-transparent text-white hover:bg-purple-600 hover:text-white font-semibold py-2 px-4 rounded-lg transition flex items-center">
+                    <i class="fas fa-bars text-2xl"></i>
+                </div>
+
+
+                <!-- Dropdown content -->
+                <div class="absolute right-0 mt-2 w-56 bg-white text-gray-700 rounded-lg shadow-lg z-50 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
+                    <a href="{{ route('petani-laporan') }}" class="block px-4 py-2 hover:bg-purple-100 hover:text-purple-700 transition">
+                        Perkembangan Ternak
+                    </a>
+                    <a href="{{ route('petani.tambah') }}" class="block px-4 py-2 hover:bg-purple-100 hover:text-purple-700 transition">
+                        Tambah Ternak Baru
+                    </a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full text-left px-4 py-2 hover:bg-purple-100 hover:text-purple-700 transition">
+                            Logout
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
 
-        <!-- Filters and Search -->
-        <div class="bg-white rounded-lg shadow p-4 mb-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <form method="GET" action="{{ route('petani-dashboard') }}" class="w-full md:w-1/3">
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari Ternak</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400"></i>
-                        </div>
-                        <input type="text" name="search" id="search" value="{{ request('search') }}"
-                            placeholder="Nama ternak atau ID..."
-                            class="pl-10 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        <button type="submit" class="hidden"></button>
-                    </div>
-                </form>
 
-                <!-- <div class="w-full md:w-1/3">
+        <main class="container mx-auto px-4 py-8">
+
+            <!-- Filters and Search -->
+            <div class="bg-white rounded-lg shadow p-4 mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <form method="GET" action="{{ route('petani-dashboard') }}" class="w-full md:w-1/3">
+                        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari Ternak</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                            <input type="text" name="search" id="search" value="{{ request('search') }}"
+                                placeholder="Nama ternak atau ID..."
+                                class="pl-10 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <button type="submit" class="hidden"></button>
+                        </div>
+                    </form>
+
+                    <!-- <div class="w-full md:w-1/3">
                     <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                     <select id="status" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="">Semua Status</option>
@@ -97,151 +108,153 @@
                         <option value="ikan">Ikan</option>
                     </select>
                 </div> -->
-            </div>
-        </div>
-
-        <!-- Statistics Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-            <div class="bg-white rounded-lg shadow p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500 text-sm">Total Ternak</p>
-                        <h3 class="text-2xl font-bold text-gray-800">{{ $total }}</h3>
-                    </div>
-                    <div class="bg-blue-100 p-3 rounded-full">
-                        <i class="fas fa-cow text-blue-600 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-lg shadow p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500 text-sm">Aktif</p>
-                        <h3 class="text-2xl font-bold text-gray-800">{{ $aktif }}</h3>
-                    </div>
-                    <div class="bg-green-100 p-3 rounded-full">
-                        <i class="fas fa-check-circle text-green-600 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-lg shadow p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500 text-sm">Nonaktif</p>
-                        <h3 class="text-2xl font-bold text-gray-800">{{ $nonaktif }}</h3>
-                    </div>
-                    <div class="bg-red-100 p-3 rounded-full">
-                        <i class="fas fa-times-circle text-red-600 text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-lg shadow p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-gray-500 text-sm">Pending</p>
-                        <h3 class="text-2xl font-bold text-gray-800">{{ $pending }}</h3>
-                    </div>
-                    <div class="bg-yellow-100 p-3 rounded-full">
-                        <i class="fas fa-hourglass-half text-yellow-600 text-xl"></i>
-                    </div>
                 </div>
             </div>
 
-        </div>
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Total Ternak</p>
+                            <h3 class="text-2xl font-bold text-gray-800">{{ $total }}</h3>
+                        </div>
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <i class="fas fa-cow text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Aktif</p>
+                            <h3 class="text-2xl font-bold text-gray-800">{{ $aktif }}</h3>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Nonaktif</p>
+                            <h3 class="text-2xl font-bold text-gray-800">{{ $nonaktif }}</h3>
+                        </div>
+                        <div class="bg-red-100 p-3 rounded-full">
+                            <i class="fas fa-times-circle text-red-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-sm">Pending</p>
+                            <h3 class="text-2xl font-bold text-gray-800">{{ $pending }}</h3>
+                        </div>
+                        <div class="bg-yellow-100 p-3 rounded-full">
+                            <i class="fas fa-hourglass-half text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
 
-        <!-- Livestock Table -->
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Ternak</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lokasi</th>
-                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse ($ternaks as $ternak)
-                        <tr class="hover:bg-gray-50 transition-colors duration-150">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 align-middle">{{ $ternak->id }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
-                                        @php
-                                        $icons = [
-                                        'ayam' => 'fas fa-egg text-yellow-500',
-                                        'sapi' => 'fas fa-cow text-brown-500',
-                                        'kambing' => 'fas fa-horse-head text-gray-500',
-                                        'bebek' => 'fas fa-drumstick-bite text-green-500',
-                                        'ikan' => 'fas fa-fish text-blue-500',
-                                        ];
-                                        $iconClass = $icons[$ternak->jenis] ?? 'fas fa-question-circle text-gray-400';
-                                        @endphp
-                                        <i class="{{ $iconClass }} text-2xl"></i>
+            <!-- Livestock Table -->
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Ternak</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lokasi</th>
+                                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse ($ternaks as $ternak)
+                            <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 align-middle">{{ $ternak->id }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10">
+                                            @php
+                                            $icons = [
+                                            'ayam' => 'fas fa-egg text-yellow-500',
+                                            'sapi' => 'fas fa-cow text-brown-500',
+                                            'kambing' => 'fas fa-horse-head text-gray-500',
+                                            'bebek' => 'fas fa-drumstick-bite text-green-500',
+                                            'ikan' => 'fas fa-fish text-blue-500',
+                                            ];
+                                            $iconClass = $icons[$ternak->jenis] ?? 'fas fa-question-circle text-gray-400';
+                                            @endphp
+                                            <i class="{{ $iconClass }} text-2xl"></i>
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900">{{ $ternak->nama }}</div>
+                                            <div class="text-sm text-gray-500">ID #{{ $ternak->id }}</div>
+                                        </div>
                                     </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">{{ $ternak->nama }}</div>
-                                        <div class="text-sm text-gray-500">ID #{{ $ternak->id }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize align-middle">{{ $ternak->jenis }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">{{ $ternak->lokasi }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center align-middle">
+                                    @php
+                                    $statusClasses = [
+                                    'active' => 'status-active',
+                                    'inactive' => 'status-inactive',
+                                    'pending' => 'status-pending',
+                                    ];
+                                    $statusClass = $statusClasses[$ternak->status] ?? 'bg-gray-200 text-gray-600';
+                                    @endphp
+                                    <span class="{{ $statusClass }} px-2 py-1 text-xs font-semibold rounded-full">
+                                        {{ ucfirst($ternak->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
+                                    <div class="flex justify-end gap-2">
+                                        <a href="{{ route('petani.detail', $ternak->id) }}" class="text-blue-600 hover:text-blue-900" title="Lihat Detail">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('petani.edit', $ternak->id) }}" class="text-yellow-600 hover:text-yellow-900" title="Edit">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
+                                        <form action="{{ route('petani.delete', $ternak->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-900" title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize align-middle">{{ $ternak->jenis }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">{{ $ternak->lokasi }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-center align-middle">
-                                @php
-                                $statusClasses = [
-                                'active' => 'status-active',
-                                'inactive' => 'status-inactive',
-                                'pending' => 'status-pending',
-                                ];
-                                $statusClass = $statusClasses[$ternak->status] ?? 'bg-gray-200 text-gray-600';
-                                @endphp
-                                <span class="{{ $statusClass }} px-2 py-1 text-xs font-semibold rounded-full">
-                                    {{ ucfirst($ternak->status) }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
-                                <div class="flex justify-end gap-2">
-                                    <a href="{{ route('petani.detail', $ternak->id) }}" class="text-blue-600 hover:text-blue-900" title="Lihat Detail">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('petani.edit', $ternak->id) }}" class="text-yellow-600 hover:text-yellow-900" title="Edit">
-                                        <i class="fas fa-pen"></i>
-                                    </a>
-                                    <form action="{{ route('petani.delete', $ternak->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900" title="Hapus">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada data ternak.</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada data ternak.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <!-- Pagination -->
-        <div class="flex items-center justify-between mt-6">
-            <!-- <div class="text-sm text-gray-700">
+            <!-- Pagination -->
+            <div class="flex items-center justify-between mt-6">
+                <!-- <div class="text-sm text-gray-700">
                 Menampilkan <span class="font-medium">1</span> sampai <span class="font-medium">4</span> dari <span class="font-medium">142</span> ternak
             </div> -->
-            <div class="px-4 py-3 bg-white border-t border-gray-200 sm:px-6">
-                {{ $ternaks->links('pagination::tailwind') }}
+                <div class="px-4 py-3 bg-white border-t border-gray-200 sm:px-6">
+                    {{ $ternaks->links('pagination::tailwind') }}
+                </div>
             </div>
-        </div>
     </div>
+
+    </main>
 
 
     @if(session('success'))

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Investor;
+use App\Models\User;
 use App\Models\Ternak;
 
 class Investasi extends Model
@@ -24,17 +25,22 @@ class Investasi extends Model
 
     public function investor()
     {
-        return $this->belongsTo(Investor::class);
+        return $this->belongsTo(Investor::class, 'id_investor');
     }
 
-    public function ternaks()
+    public function ternak()
     {
-        return $this->belongsTo(Ternak::class,'id_ternaks');
+        return $this->belongsTo(Ternak::class,'id_ternak');
     }
 
     public function bank()
     {
-        return $this->belongsTo(Bank::class);
+        return $this->belongsTo(Bank::class, 'id_bank');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id');
     }
 
 

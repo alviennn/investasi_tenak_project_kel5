@@ -14,14 +14,14 @@ class PenarikanRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_investor' => 'required|exists:investors,id', // Validasi id_investor
-            'id_petani' => 'required|exists:petani,id', // Validasi id_petani
-            'id_bank' => 'required|exists:bank,id', // Validasi id_bank
+            // 'id_investor' => 'required|exists:investors,id', // Validasi id_investor
+            // 'id_petani' => 'required|exists:petani,id', // Validasi id_petani
+            // 'id_bank' => 'required|exists:bank,id', // Validasi id_bank
             'nama_bank' => 'required|string|max:255', // Nama Bank
             'nomor_rekening' => 'required|string|max:20', // Nomor Rekening
             'jumlah_penarikan' => 'required|numeric|min:1', // Jumlah penarikan harus lebih dari 0
-            'tanggal' => 'required|date', // Tanggal penarikan
-            'status' => 'required|in:Pending,Success,Failed', // Status penarikan
+            // 'tanggal' => 'required|date', // Tanggal penarikan
+            // 'status' => 'required|in:Pending,Success,Failed', // Status penarikan
         ];
     }
 
